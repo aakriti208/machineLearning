@@ -44,12 +44,16 @@ df["processed_message"] = df["message"].apply(preprocess_text)
 X_train, X_test, y_train, y_test = train_test_split(
     df["processed_message"], df["label"], test_size=0.2, random_state=42
 )
-vectorizer = TfidfVectorizer()
+vectorizer = TfidfVectorizer(stop_words='english')
 X_train_tfidf = vectorizer.fit_transform(X_train)
 X_test_tfidf = vectorizer.transform(X_test)
 
+print(X_train_tfidf.shape, X_test_tfidf.shape)
+
 model = MultinomialNB()
 model.fit(X_train_tfidf, y_train)
+
+print("Model training completed.")
 
 y_pred = model.predict(X_test_tfidf)
 
